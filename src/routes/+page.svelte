@@ -14,13 +14,13 @@
 	let data_polygons: arrow.Table | undefined = $state();
 
 	onMount(async () => {
-		const resp1 = await fetch('/points.arrow');
+		const resp1 = await fetch('./points.arrow');
 		data_points = await arrow.tableFromIPC(resp1);
 
-		const resp2 = await fetch('/lines.arrow');
+		const resp2 = await fetch('./lines.arrow');
 		data_lines = await arrow.tableFromIPC(resp2);
 
-		const resp3 = await fetch('/polygons.arrow');
+		const resp3 = await fetch('./polygons.arrow');
 		data_polygons = await arrow.tableFromIPC(resp3);
 	});
 </script>
