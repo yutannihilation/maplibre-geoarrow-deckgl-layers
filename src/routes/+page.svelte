@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { MapLibre } from 'svelte-maplibre-gl';
 	import { DeckGLOverlay } from 'svelte-maplibre-gl/deckgl';
-	import { GeoArrowPathLayer, GeoArrowScatterplotLayer } from '@geoarrow/deck.gl-layers';
+	import {
+		GeoArrowPathLayer,
+		GeoArrowPolygonLayer,
+		GeoArrowScatterplotLayer
+	} from '@geoarrow/deck.gl-layers';
 	import * as arrow from 'apache-arrow';
 	import { onMount } from 'svelte';
 
 	let data_points: arrow.Table | undefined = $state();
 	let data_lines: arrow.Table | undefined = $state();
+	let data_polygons: arrow.Table | undefined = $state();
 
 	onMount(async () => {
 		const resp1 = await fetch('/points.arrow');
@@ -15,7 +20,8 @@
 		const resp2 = await fetch('/lines.arrow');
 		data_lines = await arrow.tableFromIPC(resp2);
 
-		console.log(data_lines);
+		const resp3 = await fetch('/polygons.arrow');
+		data_polygons = await arrow.tableFromIPC(resp3);
 	});
 </script>
 
@@ -35,6 +41,7 @@
 						radiusUnits: 'pixels'
 					})
 				: null,
+
 			data_lines
 				? new GeoArrowPathLayer({
 						id: 'geoarrow-lines',
@@ -43,6 +50,17 @@
 						positionFormat: 'XY',
 						getColor: [255, 0, 0],
 						widthMinPixels: 1
+					})
+				: null,
+
+			data_polygons
+				? new GeoArrowPolygonLayer({
+						id: 'geoarrow-polygons',
+						data: data_polygons,
+						getPolygon: data_polygons.getChild('geom')!,
+						positionFormat: 'XY',
+						getLineColor: [128, 0, 128],
+						getFillColor: [128, 0, 128, 128]
 					})
 				: null
 		]}
