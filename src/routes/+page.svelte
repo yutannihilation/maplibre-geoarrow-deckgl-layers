@@ -30,7 +30,6 @@
 	style="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
 >
 	<DeckGLOverlay
-		interleaved
 		layers={[
 			data_points
 				? new GeoArrowScatterplotLayer({

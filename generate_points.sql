@@ -13,6 +13,6 @@ SELECT
         RANDOM() * 180 - 90    -- Latitude: random between -90 and 90
     ) AS geom,
     RANDOM() as "value"
-FROM range(10000);
+FROM range(100000);
 
 COPY t1 TO 'static/points.arrow';
