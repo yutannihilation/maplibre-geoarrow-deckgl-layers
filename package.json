@@ -15,6 +15,7 @@
 	},
 	"devDependencies": {
 		"@deck.gl/layers": "^9.1.12",
+		"@duckdb/duckdb-wasm": "1.29.1-dev132.0",
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
 		"@geoarrow/deck.gl-layers": "^0.3.0",
