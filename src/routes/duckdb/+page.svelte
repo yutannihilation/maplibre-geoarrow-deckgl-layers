@@ -4,25 +4,12 @@
 	import { GeoArrowScatterplotLayer } from '@geoarrow/deck.gl-layers';
 
 	import * as duckdb from '@duckdb/duckdb-wasm';
-	import duckdb_wasm from '@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm?url';
-	import mvp_worker from '@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js?url';
 	import duckdb_wasm_eh from '@duckdb/duckdb-wasm/dist/duckdb-eh.wasm?url';
 	import eh_worker from '@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js?url';
 
 	import * as arrow from 'apache-arrow';
 
 	import { onMount } from 'svelte';
-
-	const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
-		mvp: {
-			mainModule: duckdb_wasm,
-			mainWorker: mvp_worker
-		},
-		eh: {
-			mainModule: duckdb_wasm_eh,
-			mainWorker: eh_worker
-		}
-	};
 
 	let nPoints = $state(0);
 
@@ -43,14 +30,11 @@
 	let stmt: duckdb.AsyncPreparedStatement | undefined;
 
 	onMount(async () => {
-		// Select a bundle based on browser checks
-		const bundle = await duckdb.selectBundle(MANUAL_BUNDLES);
-		// Instantiate the asynchronus version of DuckDB-wasm
-		const worker = new Worker(bundle.mainWorker!);
+		const worker = new Worker(eh_worker);
 		const logger = new duckdb.ConsoleLogger();
 
 		db = new duckdb.AsyncDuckDB(logger, worker);
-		await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
+		await db.instantiate(duckdb_wasm_eh, eh_worker);
 
 		await db.open({});
 		conn = await db.connect();
