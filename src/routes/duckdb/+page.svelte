@@ -57,7 +57,7 @@ FROM range(?::BIGINT);
 	});
 </script>
 
-<div class="px-10 text-2xl">
+<div class="m-10 text-2xl">
 	<label>
 		number of points:
 		<input type="number" bind:value={nPoints} min="10000" max="1000000" step="10000" />
