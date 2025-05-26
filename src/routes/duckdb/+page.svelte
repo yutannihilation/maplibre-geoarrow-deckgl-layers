@@ -7,17 +7,18 @@
 	import duckdb_wasm_eh from '@duckdb/duckdb-wasm/dist/duckdb-eh.wasm?url';
 	import eh_worker from '@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js?url';
 
-	import * as arrow from 'apache-arrow';
+	import type { Table } from 'apache-arrow';
 
 	import { onMount } from 'svelte';
 
 	let nPoints = $state(0);
 
-	let dataPoints: arrow.Table | undefined = $state();
+	let dataPoints: Table | undefined = $state();
 	const updateDataPoints = async (nPoints: number) => {
 		if (stmt) {
 			const result = await stmt.query(nPoints);
-			dataPoints = result as unknown as arrow.Table;
+			// TODO: stmt.query() returns an object of arrow.Table, but the type is unknown to the type checker
+			dataPoints = result as unknown as Table;
 		}
 	};
 
