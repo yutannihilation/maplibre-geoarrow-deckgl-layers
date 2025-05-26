@@ -35,7 +35,7 @@
 		const logger = new duckdb.ConsoleLogger();
 
 		db = new duckdb.AsyncDuckDB(logger, worker);
-		await db.instantiate(duckdb_wasm_eh, eh_worker);
+		await db.instantiate(duckdb_wasm_eh);
 
 		await db.open({});
 		conn = await db.connect();
